@@ -1,15 +1,23 @@
-version: '3.9'
+version: "3.9"
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "100m"
+    max-file: "3"
 
 services:
   redis-db:
     extends:
       file: ./services/redis.yml
       service: redis-db
+    logging: *default-logging
 
   db-init:
     extends:
       file: ./services/db.yml
       service: db-init
+    logging: *default-logging
 
   db:
     depends_on:
@@ -18,6 +26,7 @@ services:
     extends:
       file: ./services/db.yml
       service: db
+    logging: *default-logging
 
   backend:
     depends_on:
@@ -30,14 +39,18 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile
       args:
-        RELEASE_VERSION: 9.0.2
+        RELEASE_VERSION: 11.2.1
+    pull_policy: build
+    command: sh -c "cp -f /app/config/config_helper.exs /app/releases/11.2.1/config_helper.exs && bin/blockscout eval \"Elixir.Explorer.ReleaseTasks.create_and_migrate()\" && bin/blockscout start"
     links:
       - db:database
     environment:
-        ETHEREUM_JSONRPC_HTTP_URL: http://host.docker.internal:8545/
-        ETHEREUM_JSONRPC_TRACE_URL: http://host.docker.internal:8545/
-        ETHEREUM_JSONRPC_WS_URL: ws://host.docker.internal:8545/
-        CHAIN_ID: '1337'
+      ETHEREUM_JSONRPC_HTTP_URL: https://rpc-mainnet-blockscout.ozonescan.com/rpc/
+      ETHEREUM_JSONRPC_TRACE_URL: https://rpc-mainnet-blockscout.ozonescan.com/rpc/
+      ETHEREUM_JSONRPC_WS_URL: wss://rpc-mainnet-blockscout.ozonescan.com/ws/
+      CHAIN_ID: "10121"
+      RELEASE_COOKIE: blockscout_cookie
+    logging: *default-logging
 
   nft_media_handler:
     depends_on:
@@ -49,17 +62,20 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile
       args:
-        RELEASE_VERSION: 9.0.2
+        RELEASE_VERSION: 11.2.1
+    logging: *default-logging
 
   visualizer:
     extends:
       file: ./services/visualizer.yml
       service: visualizer
+    logging: *default-logging
 
   sig-provider:
     extends:
       file: ./services/sig-provider.yml
       service: sig-provider
+    logging: *default-logging
 
   frontend:
     depends_on:
@@ -67,11 +83,13 @@ services:
     extends:
       file: ./services/frontend.yml
       service: frontend
+    logging: *default-logging
 
   stats-db-init:
     extends:
       file: ./services/stats.yml
       service: stats-db-init
+    logging: *default-logging
 
   stats-db:
     depends_on:
@@ -80,6 +98,7 @@ services:
     extends:
       file: ./services/stats.yml
       service: stats-db
+    logging: *default-logging
 
   stats:
     depends_on:
@@ -88,6 +107,7 @@ services:
     extends:
       file: ./services/stats.yml
       service: stats
+    logging: *default-logging
 
   user-ops-indexer:
     depends_on:
@@ -96,6 +116,7 @@ services:
     extends:
       file: ./services/user-ops-indexer.yml
       service: user-ops-indexer
+    logging: *default-logging
 
   proxy:
     depends_on:
@@ -105,3 +126,4 @@ services:
     extends:
       file: ./services/nginx.yml
       service: proxy
+    logging: *default-logging

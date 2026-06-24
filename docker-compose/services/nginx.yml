@@ -1,13 +1,14 @@
-version: '3.9'
+version: "3.9"
 
 services:
   proxy:
     image: nginx
     container_name: proxy
     extra_hosts:
-      - 'host.docker.internal:host-gateway'
+      - "host.docker.internal:host-gateway"
     volumes:
       - "../proxy:/etc/nginx/templates"
+      - "./ssl:/etc/nginx/ssl"
     environment:
       BACK_PROXY_PASS: ${BACK_PROXY_PASS:-http://backend:4000}
       FRONT_PROXY_PASS: ${FRONT_PROXY_PASS:-http://frontend:3000}
@@ -18,3 +19,9 @@ services:
         published: 8080
       - target: 8081
         published: 8081
+      - target: 443
+        published: 443
+      - target: 2053
+        published: 2053
+      - target: 2083
+        published: 2083
