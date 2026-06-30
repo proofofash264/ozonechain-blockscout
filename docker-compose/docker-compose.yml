@@ -45,9 +45,9 @@ services:
     links:
       - db:database
     environment:
-      ETHEREUM_JSONRPC_HTTP_URL: https://rpc-mainnet-blockscout.ozonescan.com/rpc/
-      ETHEREUM_JSONRPC_TRACE_URL: https://rpc-mainnet-blockscout.ozonescan.com/rpc/
-      ETHEREUM_JSONRPC_WS_URL: wss://rpc-mainnet-blockscout.ozonescan.com/ws/
+      ETHEREUM_JSONRPC_HTTP_URL: https://rpc2-mainnet-blockscout.ozonescan.com/rpc/
+      ETHEREUM_JSONRPC_TRACE_URL: https://rpc2-mainnet-blockscout.ozonescan.com/rpc/
+      ETHEREUM_JSONRPC_WS_URL: wss://rpc2-mainnet-blockscout.ozonescan.com/ws/
       CHAIN_ID: "10121"
       RELEASE_COOKIE: blockscout_cookie
     logging: *default-logging

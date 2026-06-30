@@ -101,3 +101,24 @@ server {
         }
     }
 }
+server {
+    listen 80;
+    listen 443 ssl;
+
+    server_name rpc2-mainnet-blockscout.ozonescan.com;
+
+    ssl_certificate     /etc/nginx/ssl/explorer/selfsigned.crt;
+    ssl_certificate_key /etc/nginx/ssl/explorer/selfsigned.key;
+
+    location /rpc/ {
+        proxy_pass http://host.docker.internal:8545/;
+    }
+
+    location /ws/ {
+        proxy_pass http://host.docker.internal:8546/;
+
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
