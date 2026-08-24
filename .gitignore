@@ -78,3 +78,5 @@ tasks_in_progress
 /temp
 
 openapi.yaml
+config.bat
+node_modules
