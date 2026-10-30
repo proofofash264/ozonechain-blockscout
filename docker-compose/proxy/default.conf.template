@@ -9,9 +9,9 @@ server {
     listen       443 ssl;
     ssl_certificate     /etc/nginx/ssl/explorer/selfsigned.crt;
     ssl_certificate_key /etc/nginx/ssl/explorer/selfsigned.key;
-    server_name  explorer-v2.ozonescan.com ozonescan.com;
+    server_name  testnet.ozonescan.com;
     proxy_http_version 1.1;
-    add_header Content-Security-Policy "img-src 'self' blob: data: *.ozonescan.com ozonescan.com cdn.coinzilla.io servedbyadbutler.com";
+    add_header Content-Security-Policy "img-src 'self' blob: data: *.testnet.ozonescan.com testnet.ozonescan.com cdn.coinzilla.io servedbyadbutler.com";
 
     location ~ ^/(api(?!-docs$)|socket|sitemap.xml|auth/auth0|auth/auth0/callback|auth/logout) {
         proxy_pass            ${BACK_PROXY_PASS};
@@ -41,7 +41,7 @@ server {
     listen       443 ssl;
     ssl_certificate     /etc/nginx/ssl/explorer/selfsigned.crt;
     ssl_certificate_key /etc/nginx/ssl/explorer/selfsigned.key;
-    server_name  stats-explorer-mainnet-v2.ozonescan.com stats-explorer-mainnet.ozonescan.com;
+    server_name  stats-testnet.ozonescan.com;
     proxy_http_version 1.1;
     proxy_hide_header Access-Control-Allow-Origin;
     proxy_hide_header Access-Control-Allow-Methods;
@@ -66,7 +66,7 @@ server {
     listen       443 ssl;
     ssl_certificate     /etc/nginx/ssl/explorer/selfsigned.crt;
     ssl_certificate_key /etc/nginx/ssl/explorer/selfsigned.key;
-    server_name  visualizer-explorer-mainnet-v2.ozonescan.com visualizer-explorer-mainnet.ozonescan.com;
+    server_name  visualizer-testnet.ozonescan.com;
     proxy_http_version 1.1;
     proxy_hide_header Access-Control-Allow-Origin;
     proxy_hide_header Access-Control-Allow-Methods;
@@ -105,7 +105,7 @@ server {
     listen 80;
     listen 443 ssl;
 
-    server_name rpc2-mainnet-blockscout.ozonescan.com rpc-mainnet-blockscout.ozonescan.com;
+    server_name rpc-testnet.ozonescan.com;
 
     ssl_certificate     /etc/nginx/ssl/explorer/selfsigned.crt;
     ssl_certificate_key /etc/nginx/ssl/explorer/selfsigned.key;
@@ -120,5 +120,9 @@ server {
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
+    }
+
+    location / {
+        proxy_pass http://host.docker.internal:8545/;
     }
 }
