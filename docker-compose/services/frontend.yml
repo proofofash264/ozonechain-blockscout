@@ -6,7 +6,7 @@ services:
     # pull_policy: always
     image: custom-frontend-image:1
     build:
-      context: /home/ubuntu/mainnet-explorer-new/ozonechain-blockscout-frontend
+      context: /home/ubuntu/testnet-explorer-new/ozonechain-blockscout-frontend
       dockerfile: Dockerfile
     platform: linux/amd64
     restart: always
